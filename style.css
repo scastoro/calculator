@@ -25,6 +25,7 @@
 
 .container .display-container .display{
   background-color: white;
+  height: 30px;
   font-size: 24px;
   margin-right: 5px;
   border: black 1px solid;
@@ -65,7 +66,7 @@
   font-size: 18px;
   width: 45px;
   padding: 5px;
-  border: solid black 1px;
+  border: solid lightslategrey 1px;
   border-radius: 12px;
 }
 .container .button-container .operator-container{
