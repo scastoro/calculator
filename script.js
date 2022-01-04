@@ -2,24 +2,25 @@ const display = document.querySelector('.display');
 const clearBtn = document.querySelector('.clear')
 let firstNumber;
 let secondNumber;
+let oldSecondNumber;
 let operatorValue;
 let isCleared = false;
 
 // Create the basic math functions
 function add(num1, num2){
-  return parseFloat(num1) + parseFloat(num2);
+  return +(parseFloat(num1) + parseFloat(num2)).toFixed(2);
 }
 
 function subtract(num1, num2) {
-  return parseFloat(num1) - parseFloat(num2);
+  return +(parseFloat(num1) - parseFloat(num2)).toFixed(2);
 }
 
 function multiply(num1, num2){
-  return parseFloat(num1) * parseFloat(num2);
+  return +(parseFloat(num1) * parseFloat(num2)).toFixed(2);
 }
 
 function divide(num1, num2){
-  return parseFloat(num1) / parseFloat(num2);
+  return +(parseFloat(num1) / parseFloat(num2)).toFixed(2);
 }
 
 // Create operator function
@@ -44,6 +45,7 @@ function clearDisplay(){
   firstNumber = null;
   secondNumber = null;
   operatorValue = null;
+  isCleared = false;
 }
 
 clearBtn.addEventListener('click', clearDisplay);
@@ -64,6 +66,27 @@ numButtons.forEach((btn) => {
   btn.addEventListener('click', populateDisplay);
 });
 
+// Function for decimal button
+function addDecimal(obj){
+  if(display.innerText.indexOf('.') !== -1){
+    return
+  }
+  display.innerText += obj.target.innerText
+}
+
+const decBtn = document.querySelector('.btn-dec');
+decBtn.addEventListener('click', addDecimal);
+
+// Function for the backspace button
+function backspace(){
+  let displayText = display.innerText;
+  displayText = displayText.slice(0,-1);
+  display.innerText = displayText;
+}
+
+const backBtn = document.querySelector('.btn-back');
+backBtn.addEventListener('click', backspace);
+
 // Function to run when operator buttons are pressed
 function selectOperator(obj){
   if(!firstNumber) {
@@ -80,13 +103,12 @@ function selectOperator(obj){
     console.dir(displayOutput);
     display.innerText = displayOutput;
     firstNumber = displayOutput;
-    secondNumber = null;
-    
+    secondNumber = null; 
   }
   
   
 }
-                                                                                        
+                                                                           
 const operatorButtons = document.querySelectorAll('.btn-operator');
 operatorButtons.forEach((btn) => {
   btn.addEventListener('click', selectOperator);
@@ -94,11 +116,18 @@ operatorButtons.forEach((btn) => {
 
 // Run operate function when equals sign is pressed
 function evaluate(){
-  secondNumber = display.innerText;
-  display.innerText = operate(operatorValue, firstNumber, secondNumber, isCleared);
-  isCleared = false;
-  firstNumber = null;
-  secondNumber = null;
+  if(!isCleared && firstNumber === null && operatorValue){
+    firstNumber = display.innerText
+    display.innerText = operate(operatorValue, firstNumber, oldSecondNumber, true);
+    firstNumber = null;
+  } else {
+    oldSecondNumber = display.innerText;
+    secondNumber = display.innerText;
+    display.innerText = operate(operatorValue, firstNumber, secondNumber, isCleared);
+    isCleared = false;
+    firstNumber = null;
+    secondNumber = null;
+  }
 }
 
 const equalsBtn = document.getElementById('equals')
