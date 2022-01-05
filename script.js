@@ -39,6 +39,28 @@ function operate(operator, num1, num2, clear){
   }
 }
 
+// Change background color when number key is pressed
+const allButtons = document.querySelectorAll('.btn');
+allButtons.forEach((btn) => {
+  btn.addEventListener('mousedown', () => {
+    btn.classList.toggle('num-pressed');
+  });
+  btn.addEventListener('mouseup', () => {
+    btn.classList.toggle('num-pressed');
+  });
+});
+
+// Change background color when operator key is pressed
+const opButtons = document.querySelectorAll('.btn-op');
+opButtons.forEach((btn) => {
+  btn.addEventListener('mousedown', () => {
+    btn.classList.toggle('operator-pressed');
+  });
+  btn.addEventListener('mouseup', () => {
+    btn.classList.toggle('operator-pressed');
+  });
+});
+
 // Clear display div and reset global variables when clear button is pressed
 function clearDisplay(){
   display.innerText = '';
@@ -55,10 +77,12 @@ function populateDisplay(obj){
   if(!isCleared) {
     display.innerText = '';
     isCleared = true;
-    console.log(isCleared);
   }
-  display.innerText += obj.target.innerText
-  console.dir(obj.target.innerText);
+  if(obj.type === 'keypress'){
+    display.innerText += obj.key;
+  } else {
+    display.innerText += obj.target.innerText
+  }
 }
 
 const numButtons = document.querySelectorAll('.btn-num');
@@ -66,12 +90,17 @@ numButtons.forEach((btn) => {
   btn.addEventListener('click', populateDisplay);
 });
 
+
 // Function for decimal button
-function addDecimal(obj){
+function addDecimal(){
+  if(!isCleared) {
+    display.innerText = '';
+    isCleared = true;
+  }
   if(display.innerText.indexOf('.') !== -1){
     return
   }
-  display.innerText += obj.target.innerText
+  display.innerText += '.';
 }
 
 const decBtn = document.querySelector('.btn-dec');
@@ -91,7 +120,11 @@ backBtn.addEventListener('click', backspace);
 function selectOperator(obj){
   if(!firstNumber) {
     firstNumber = display.innerText;
-    operatorValue = obj.target.innerText;
+    if(obj.type === 'keypress'){
+      operatorValue = obj.key;
+    } else {
+      operatorValue = obj.target.innerText;
+    }
     console.log(firstNumber);
     isCleared = false;
   } else {
@@ -99,7 +132,11 @@ function selectOperator(obj){
     console.log(secondNumber);
     let displayOutput = operate(operatorValue, firstNumber, secondNumber, isCleared);
     isCleared = false;
-    operatorValue = obj.target.innerText;
+    if(obj.type === 'keypress'){
+      operatorValue = obj.key;
+    } else {
+      operatorValue = obj.target.innerText;
+    }
     console.dir(displayOutput);
     display.innerText = displayOutput;
     firstNumber = displayOutput;
@@ -132,3 +169,16 @@ function evaluate(){
 
 const equalsBtn = document.getElementById('equals')
 equalsBtn.addEventListener('click', evaluate);
+
+// Event listeners for keypresses
+document.addEventListener('keypress', (event) => {
+  if(isFinite(event.key)){
+    populateDisplay(event);
+  } else if(event.key === '+' || event.key === '-' || event.key === '/' || event.key === '*'){
+    selectOperator(event);
+  } else if(event.key === 'Enter'){
+    evaluate();
+  } else if(event.key === '.'){
+    addDecimal();
+  }
+})

@@ -87,3 +87,12 @@
   border: lightslategrey 1px solid;
   border-radius: 15px;
 }
+
+/* Pressed Btn Styling */
+.container .button-container .num-container .button-row .num-pressed {
+  background-color: darkgray;
+}
+
+.container .button-container .operator-container .operator-pressed {
+  background-color: royalblue;
+}
