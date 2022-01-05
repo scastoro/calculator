@@ -78,7 +78,7 @@ function populateDisplay(obj){
     display.innerText = '';
     isCleared = true;
   }
-  if(obj.type === 'keypress'){
+  if(obj.type === 'keydown'){
     display.innerText += obj.key;
   } else {
     display.innerText += obj.target.innerText
@@ -120,7 +120,7 @@ backBtn.addEventListener('click', backspace);
 function selectOperator(obj){
   if(!firstNumber) {
     firstNumber = display.innerText;
-    if(obj.type === 'keypress'){
+    if(obj.type === 'keydown'){
       operatorValue = obj.key;
     } else {
       operatorValue = obj.target.innerText;
@@ -132,7 +132,7 @@ function selectOperator(obj){
     console.log(secondNumber);
     let displayOutput = operate(operatorValue, firstNumber, secondNumber, isCleared);
     isCleared = false;
-    if(obj.type === 'keypress'){
+    if(obj.type === 'keydown'){
       operatorValue = obj.key;
     } else {
       operatorValue = obj.target.innerText;
@@ -145,7 +145,7 @@ function selectOperator(obj){
   
   
 }
-                                                                           
+                                                                    
 const operatorButtons = document.querySelectorAll('.btn-operator');
 operatorButtons.forEach((btn) => {
   btn.addEventListener('click', selectOperator);
@@ -167,18 +167,35 @@ function evaluate(){
   }
 }
 
-const equalsBtn = document.getElementById('equals')
+const equalsBtn = document.getElementById('Enter')
 equalsBtn.addEventListener('click', evaluate);
 
-// Event listeners for keypresses
-document.addEventListener('keypress', (event) => {
+// Event listeners for keydownes
+document.addEventListener('keydown', (event) => {
   if(isFinite(event.key)){
     populateDisplay(event);
+    document.querySelector(`[data-key='${event.key}']`).classList.toggle('num-pressed');
   } else if(event.key === '+' || event.key === '-' || event.key === '/' || event.key === '*'){
     selectOperator(event);
+    document.querySelector(`#\\${event.key}`).classList.toggle('operator-pressed');
   } else if(event.key === 'Enter'){
     evaluate();
+    document.querySelector(`#${event.key}`).classList.toggle('operator-pressed');
   } else if(event.key === '.'){
     addDecimal();
+    btn.classList.toggle('num-pressed');
+    document.querySelector(`[data-key='${event.key}']`).classList.toggle('num-pressed');
+  }
+});
+document.addEventListener('keyup', (event) => {
+  if(isFinite(event.key)){
+    document.querySelector(`[data-key='${event.key}']`).classList.toggle('num-pressed');
+  } else if(event.key === '+' || event.key === '-' || event.key === '/' || event.key === '*'){
+    document.querySelector(`#\\${event.key}`).classList.toggle('operator-pressed');
+  } else if(event.key === 'Enter'){
+    document.querySelector(`#${event.key}`).classList.toggle('operator-pressed');
+  } else if(event.key === '.'){
+    btn.classList.toggle('num-pressed');
+    document.querySelector(`[data-key='${event.key}']`).classList.toggle('num-pressed');
   }
 })

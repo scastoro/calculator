@@ -8,7 +8,7 @@
 /* Basic Container Styling */
 .container {
   background-color: darkgrey;
-  width: 30%;
+  width: 25%;
   margin: 20px auto;
   padding: 10px;
   border: black 2px solid;
@@ -63,7 +63,8 @@
 }
 .container .button-container .num-container .button-row div {
   background-color: lightgrey;
-  font-size: 18px;
+  cursor: pointer;
+  font-size: 20px;
   width: 45px;
   padding: 5px;
   border: solid lightslategrey 1px;
@@ -78,6 +79,7 @@
 }
 .container .button-container .operator-container div{
   font-size: 18px;
+  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -85,7 +87,7 @@
   width: 35px;
   background-color: lightskyblue;
   border: lightslategrey 1px solid;
-  border-radius: 15px;
+  border-radius: 10px;
 }
 
 /* Pressed Btn Styling */
